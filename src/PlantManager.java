@@ -54,7 +54,7 @@ public class PlantManager {
     }
 
     public void readFile(String filename) throws PlantException {
-        plants.clear();
+        ArrayList<Plant> newPlants = new ArrayList<>();
         try(Scanner scanner = new Scanner(new BufferedReader(new FileReader(filename)))) {
             String line;
             while (scanner.hasNextLine()) {
@@ -65,8 +65,9 @@ public class PlantManager {
                 LocalDate timePlanted = LocalDate.parse(data[4]);
                 int wateringFrequency = Integer.parseInt(data[2]);
 
-                this.addPlant(new Plant(data[0],data[1],timePlanted,lastWatering, wateringFrequency));
+                newPlants.add(new Plant(data[0],data[1],timePlanted,lastWatering, wateringFrequency));
             }
+            this.plants = newPlants;
         } catch (FileNotFoundException e) {
             throw new PlantException("Could not find the file: " + e.getMessage());
         } catch (DateTimeParseException e) {
