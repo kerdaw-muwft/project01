@@ -11,23 +11,16 @@ public class Main {
         try {
             plantManager.readFile(fileName);
         } catch (PlantException e) {
-            System.err.println("An error has occured while reading " + fileName + ". " + e.getLocalizedMessage());
-        }
-        try {
-            plantManager.writeToFile();
-        } catch (Exception e) {
-            System.err.println("An error has occured while writing into file  " + fileName + ". " + e.getLocalizedMessage());
+            System.err.println("An error has occured while reading file " + fileName + ". " + e.getLocalizedMessage());
         }
 
         //výpis informací o zílivkách květin
         ArrayList<Plant> plants = plantManager.getPlants();
-        plants.forEach(plant->{
-            System.out.println(plant.getWateringInfo());
-        });
+        plants.forEach(plant-> System.out.println(plant.getWateringInfo()));
         System.out.println();
 
         //přidání nové květiny do seznamu
-        plantManager.addPlant(new Plant("Orchidej", "křehká",
+        plantManager.addPlant(new Plant("Orchidej", "Popis - křehká",
                               LocalDate.of(2025, 2,2),
                               LocalDate.of(2025, 2,14),
                               3));
@@ -47,29 +40,26 @@ public class Main {
         //uložení do souboru
         plantManager.writeToFile();
 
+
         //opetovné načtení vytvořenmého souboru
         try {
             plantManager.readFile(Settings.getOutputFile());
         } catch (PlantException e) {
-            System.err.println("An error has occured while reading " + fileName + ". " + e.getLocalizedMessage());
+            System.err.println("An error has occured while reading file" + fileName + ". " + e.getLocalizedMessage());
         }
 
         //seřazení rostlin
         /// podle data poslední zálivky
         plantManager.sort(PlantManager.SORT_BY_DATE);
         plants = plantManager.getPlants();
-        plants.forEach(plant->{
-            System.out.println(plant.getWateringInfo());
-        });
+        plants.forEach(System.out::println);
 
         System.out.println();
 
         /// podle názvu květiny
         plantManager.sort();
         plants = plantManager.getPlants();
-        plants.forEach(plant->{
-            System.out.println(plant.getWateringInfo());
-        });
+        plants.forEach(System.out::println);
     }
 
 

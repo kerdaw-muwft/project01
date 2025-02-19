@@ -14,6 +14,7 @@ public class PlantManager {
     public PlantManager(){
         this.plants = new ArrayList<>();
     }
+
     public void addPlant(Plant plant){
         this.plants.add(plant);
     }
@@ -21,15 +22,15 @@ public class PlantManager {
     public ArrayList<Plant> getPlants() {
         return new ArrayList<>(plants);
     }
+
     public Plant getPlant(int index){
         return plants.get(index);
     }
-    public void removePlant(Plant plant){
-        this.plants.remove(plant);
-    }
+
     public void removePlant(int index){
         this.plants.remove(index);
     }
+
     public ArrayList<Plant> getUnwateredPlants(){
         ArrayList<Plant> unwateredPlants = new ArrayList<>();
         for (Plant plant:plants){
@@ -39,6 +40,7 @@ public class PlantManager {
         }
         return unwateredPlants;
     }
+
     public void sort(int sortType){
         if (sortType == SORT_BY_DATE) {
             plants.sort(Comparator.comparing(Plant::getLastWatering));
@@ -46,6 +48,7 @@ public class PlantManager {
             plants.sort(Comparator.comparing(Plant::getName));
         }
     }
+
     public void sort(){
         this.sort(DEFAULT_SORT);
     }
@@ -56,10 +59,12 @@ public class PlantManager {
             String line;
             while (scanner.hasNextLine()) {
                 line =  scanner.nextLine();
+
                 String[] data = line.split(Settings.getDelimiter());
                 LocalDate lastWatering = LocalDate.parse(data[3]);
                 LocalDate timePlanted = LocalDate.parse(data[4]);
                 int wateringFrequency = Integer.parseInt(data[2]);
+
                 this.addPlant(new Plant(data[0],data[1],timePlanted,lastWatering, wateringFrequency));
             }
         } catch (FileNotFoundException e) {
@@ -70,7 +75,8 @@ public class PlantManager {
             throw new PlantException("Unkown number format:  " + e.getMessage());
         }
     }
-    public void writeToFile(){
+
+    public void writeToFile() {
         try (PrintWriter writer =
              new PrintWriter(
              new BufferedWriter(
@@ -80,7 +86,8 @@ public class PlantManager {
                 writer.println(plant);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("An error has occured while writing into file " +
+                               Settings.getOutputFile() + ". " + e.getLocalizedMessage());
         }
     }
 }
