@@ -9,25 +9,20 @@ public class Plant {
     private int wateringFrequency;
     private final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("d.M.yyy");
 
-    public Plant(String name, String notes, LocalDate timePlanted, LocalDate lastWatering, int wateringFrequency)  {
+    public Plant(String name, String notes, LocalDate timePlanted, LocalDate lastWatering, int wateringFrequency) throws PlantException {
         this.name = name;
         this.notes = notes;
         this.timePlanted = timePlanted;
         this.lastWatering = lastWatering;
-
-        try {
-            setWateringFrequency(wateringFrequency);
-        } catch (PlantException e) {
-            System.err.println("Error in setting watering frequency: " + e.getMessage());
-        }
+        setWateringFrequency(wateringFrequency);
         this.wateringFrequency = wateringFrequency;
     }
 
-    public Plant(String name, int wateringFrequency) {
+    public Plant(String name, int wateringFrequency) throws PlantException {
         this(name, "", LocalDate.now(),LocalDate.now(), wateringFrequency);
     }
 
-    public Plant(String name) {
+    public Plant(String name) throws PlantException {
         this(name, 7);
     }
 
@@ -73,7 +68,7 @@ public class Plant {
 
     public void setWateringFrequency(int wateringFrequency) throws PlantException {
         if(wateringFrequency<=0){
-               throw new PlantException("Watering frequency cannot be lesser of equal to 0");
+               throw new PlantException("Watering frequency cannot be lesser or equal to 0");
         }else {
             this.wateringFrequency = wateringFrequency;
         }

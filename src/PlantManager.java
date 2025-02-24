@@ -8,8 +8,6 @@ import java.util.Scanner;
 
 public class PlantManager {
     private ArrayList<Plant> plants;
-    public static final int SORT_BY_DATE = 1;
-    public static final int DEFAULT_SORT = 0;
 
     public PlantManager(){
         this.plants = new ArrayList<>();
@@ -41,16 +39,16 @@ public class PlantManager {
         return unwateredPlants;
     }
 
-    public void sort(int sortType){
-        if (sortType == SORT_BY_DATE) {
+    public void sort(PlantSortType sortType){
+        if (sortType.equals(PlantSortType.SORT_BY_DATE)) {
             plants.sort(Comparator.comparing(Plant::getLastWatering));
-        }else if(sortType == DEFAULT_SORT) {
+        }else if(sortType.equals(PlantSortType.DEFAULT_SORT)) {
             plants.sort(Comparator.comparing(Plant::getName));
         }
     }
 
     public void sort(){
-        this.sort(DEFAULT_SORT);
+        this.sort(PlantSortType.DEFAULT_SORT);
     }
 
     public void readFile(String filename) throws PlantException {
@@ -72,23 +70,23 @@ public class PlantManager {
             throw new PlantException("Could not find the file: " + e.getMessage());
         } catch (DateTimeParseException e) {
             throw new PlantException("Unknown local date format: " + e.getMessage());
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e){
             throw new PlantException("Unkown number format:  " + e.getMessage());
         }
     }
 
-    public void writeToFile() {
+    public void writeToFile(String outputFile) {
         try (PrintWriter writer =
              new PrintWriter(
              new BufferedWriter(
-             new FileWriter(Settings.getOutputFile())))
+             new FileWriter(outputFile)))
         ) {
             for (Plant plant : plants) {
                 writer.println(plant);
             }
         } catch (Exception e) {
             System.err.println("An error has occured while writing into file " +
-                               Settings.getOutputFile() + ". " + e.getLocalizedMessage());
+                               outputFile + ". " + e.getLocalizedMessage());
         }
     }
 }
